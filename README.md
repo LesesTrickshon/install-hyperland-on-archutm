@@ -1,29 +1,34 @@
+# **Install Hyprland on ArchUTM**
+![Arch Linux ARM Logo](https://archlinuxarm.org/public/images/alarm.png)
+***
 # Setting up Arch
 ## Arch Installation
 1. Download Arch Linux from the UTM Gallery
 2. Let it boot and log in as:
 	 `alarm login: root`
 	 `Password: root`
-3. update the installation with `pacman -Syu` and reboot
-4. now install the package `base-devel` like this `pacman -S base-devel`and reboot again
+3. Update the installation with `pacman -Syu`
+4. Now install the package `base-devel` like this `pacman -S base-devel` and reboot
 ## Adding user accounts
 1. Change your root password with `passwd`
-2. now create a new user like this
+2. Now create a new user like this
 	`useradd -m -G wheel -s /bin/bash yourname`
-3. change your user password with `passwd yourname`
-4. add admin privileges by typing `EDITOR=nano visudo`
+3. Change your user password with `passwd yourname`
+4. Add admin privileges by typing `EDITOR=nano visudo`
 	now find this line and delete the Hashtag
 	`# %wheel ALL=(ALL:ALL) ALL`
 	save with CTRL+O and then CTRL+X
-5. you can now safely login to your user account
+5. You can now safely login to your user account
 ## Adding the Locale 
-1. run
-	 `nano /etc/locale.gen
-2. uncomment the line:
-	`#en_US.UTF-8 UTF-8`
+1. Run these commands to set all the locals to default english.
+	```bash
+	sudo locale-gen en_US.UTF-8
+	sudo localectl set-locale LANG=en_US.UTF-8
+	```
+
 ## Changing the hostname
-1. run
-	`nano /etc/hostname`
+1. Run
+	`sudo nano /etc/hostname`
 
 # Setting up Wayland
 ## Downloading all packages
@@ -35,9 +40,27 @@ All the packages we need are:
 - `firefox`
 	*install them with the `--needed` flag*
 ## Enabling SDDM
-1. run the given command to start sddm at boot
-	`sudo systemctl enable sddm`
-2. now also add this. This should open sddm after but it doesnt because we haven't set out display yet.
-	`sudo systemctl start sddm`
-3. you can check on sddm with
+1. Run the given command to start sddm at boot
+	`sudo systemctl enable --now sddm`
+2. You can check on sddm with
 	`sudo systemctl status sddm`
+
+## Fixing SDDM
+1. Check if this file exists (it probably doesn't)
+	`/etc/sddm.conf`
+2. If it doesn't go and install `git`
+3. go into the home dir by using `cd ~` or simply `cd`
+4. then we `sudo git clone https://github.com/LesesTrickshon/install-hyperland-on-archutm.git`
+5. now we are going to move it into /etc by using this move command:
+	`sudo mv ~/install-hyperland-on-archutm/sddm.conf /etc/sddm.conf`
+
+# Adding a Display to UTM
+1. Shut down the arch VM
+2. Open the VM Settings via the slider/settings button in the top right.
+3. On the left menu bar find the Devices Category. It will most likely be looking like this:
+	- Serial
+	- Network
+	- Sound
+4. Press the gray "New" button under them and select "Dispaly"
+5. Change the "Emulated Display Card" to `VGA`
+6. press the save button and boot up your machine. You will see 2 windows. One for your terminal and one for the display output.
